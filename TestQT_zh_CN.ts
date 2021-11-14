@@ -128,7 +128,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="25"/>
+        <location filename="src/mainwindow.cpp" line="26"/>
         <source>Open File</source>
         <translation type="unfinished"></translation>
     </message>

@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     a.setStyle(QStyleFactory::create("Fusion"));
-    QFile f(":styles/darkorange");
+    QFile f(":styles/integrid");
     if (f.exists())
     {
         f.open(QFile::ReadOnly | QFile::Text);

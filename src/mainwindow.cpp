@@ -8,9 +8,11 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //ui->graphicsView->setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
+    ui->graphicsView->setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
+    ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     scene = new QGraphicsScene();
+    scene->setBackgroundBrush(QBrush(Qt::gray));
     ui->graphicsView->setScene(scene);
 
     QGraphicsRectItem *item1 = new QGraphicsRectItem(0, 0, 100, 100);

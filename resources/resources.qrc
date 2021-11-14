@@ -58,5 +58,7 @@
   <qresource>
     <file alias="styles/qdarkstyle">styles/qdarkstyle.qss</file>
     <file alias="styles/darkorange">styles/darkorange.qss</file>
+    <file alias="styles/adaptic">styles/adaptic.qss</file>
+    <file alias="styles/integrid">styles/integrid.qss</file>
   </qresource>
 </RCC>
