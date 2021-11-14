@@ -62,6 +62,53 @@ MainWindow::MainWindow(QWidget *parent)
             }
         }
     });
+
+    connect(ui->actionDefault, &QAction::triggered, [&]()
+            { qApp->setStyleSheet(""); });
+
+    connect(ui->actionDark, &QAction::triggered, [&]()
+            {
+                QFile f(":styles/qdarkstyle");
+                if (f.exists())
+                {
+                    f.open(QFile::ReadOnly | QFile::Text);
+                    QTextStream ts(&f);
+                    qApp->setStyleSheet(ts.readAll());
+                }
+            });
+
+    connect(ui->actionDark_Orange, &QAction::triggered, [&]()
+            {
+                QFile f(":styles/darkorange");
+                if (f.exists())
+                {
+                    f.open(QFile::ReadOnly | QFile::Text);
+                    QTextStream ts(&f);
+                    qApp->setStyleSheet(ts.readAll());
+                }
+            });
+
+    connect(ui->actionAdaptic, &QAction::triggered, [&]()
+            {
+                QFile f(":styles/adaptic");
+                if (f.exists())
+                {
+                    f.open(QFile::ReadOnly | QFile::Text);
+                    QTextStream ts(&f);
+                    qApp->setStyleSheet(ts.readAll());
+                }
+            });
+
+    connect(ui->actionIntegrid, &QAction::triggered, [&]()
+            {
+                QFile f(":styles/integrid");
+                if (f.exists())
+                {
+                    f.open(QFile::ReadOnly | QFile::Text);
+                    QTextStream ts(&f);
+                    qApp->setStyleSheet(ts.readAll());
+                }
+            });
 }
 
 MainWindow::~MainWindow()

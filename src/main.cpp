@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     a.setStyle(QStyleFactory::create("Fusion"));
-    QFile f(":styles/integrid");
+    QFile f(":styles/adaptic");
     if (f.exists())
     {
         f.open(QFile::ReadOnly | QFile::Text);

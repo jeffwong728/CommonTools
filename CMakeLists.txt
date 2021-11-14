@@ -36,7 +36,7 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Gui Widgets OpenGL LinguistTools R
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets OpenGL LinguistTools REQUIRED)
 
 list(APPEND QT_RESOURCES resources/resources.qrc)
-qt_add_resources(RESOURCES ${QT_RESOURCES})
+qt5_add_resources(RESOURCES ${QT_RESOURCES})
 list(APPEND RESOURCES resources/resources.rc)
 
 set(TS_FILES TestQT_zh_CN.ts)
