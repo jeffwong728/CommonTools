@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"thread": "cpp",
+			"chrono": "cpp",
+			"qapplication": "cpp"
+		}
+	}
+}
