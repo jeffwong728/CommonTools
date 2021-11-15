@@ -60,5 +60,6 @@
     <file alias="styles/darkorange">styles/darkorange.qss</file>
     <file alias="styles/adaptic">styles/adaptic.qss</file>
     <file alias="styles/integrid">styles/integrid.qss</file>
+    <file alias="langs/TestQT_zh_CN">langs/TestQT_zh_CN.qm</file>
   </qresource>
 </RCC>

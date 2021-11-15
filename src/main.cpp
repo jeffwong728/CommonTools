@@ -4,6 +4,7 @@
 #include <QStyleFactory>
 #include <QFile>
 #include <QTextStream>
+#include <QTranslator>
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +17,10 @@ int main(int argc, char *argv[])
         QTextStream ts(&f);
         qApp->setStyleSheet(ts.readAll());
     }
+
+    QTranslator t;
+    t.load(":langs/TestQT_zh_CN");
+    a.installTranslator(&t);
 
     MainWindow w;
     w.show();
