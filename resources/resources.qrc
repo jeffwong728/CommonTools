@@ -1,4 +1,4 @@
-<!DOCTYPE RCC><RCC version="1.0">
+<RCC>
   <qresource>
     <file alias="icons/logo">icons/logo.ico</file>
     <file alias="images/logo">images/logo.png</file>
@@ -15,6 +15,17 @@
     <file alias="fonts/consolas">fonts/consola.ttf</file>
   </qresource>
   <qresource prefix="qss_icons">
+    <file>images/zoom.png</file>
+    <file>images/zoom_actual.png</file>
+    <file>images/zoom_actual_equal.png</file>
+    <file>images/zoom_extend.png</file>
+    <file>images/zoom_fit.png</file>
+    <file>images/zoom_in.png</file>
+    <file>images/zoom_last.png</file>
+    <file>images/zoom_layer.png</file>
+    <file>images/zoom_out.png</file>
+    <file>images/zoom_refresh.png</file>
+    <file>images/zoom_selection.png</file>
     <file>images/up_arrow_disabled.png</file>
     <file>images/Hmovetoolbar.png</file>
     <file>images/stylesheet-branch-end.png</file>
@@ -54,6 +65,13 @@
     <file>images/radio_unchecked_disabled.png</file>
     <file>images/radio_unchecked_focus.png</file>
     <file>images/radio_unchecked.png</file>
+    <file>images/image-import.png</file>
+    <file>images/magnifier-zoom-actual-equal.png</file>
+    <file>images/magnifier-zoom-fit.png</file>
+    <file>images/magnifier-zoom-in.png</file>
+    <file>images/magnifier-zoom-out.png</file>
+    <file>images/Arrow-turn-left-icon.png</file>
+    <file>images/Arrow-turn-right-icon.png</file>
   </qresource>
   <qresource>
     <file alias="styles/qdarkstyle">styles/qdarkstyle.qss</file>
