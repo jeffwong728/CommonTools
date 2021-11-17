@@ -1,15 +1,66 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include <QtWidgets>
-#include <QtOpenGL>
+#include <QActionGroup>
+#include <QOpenGLWidget>
+#include <QTranslator>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    chsTranslator = std::make_unique<QTranslator>();
+    if (chsTranslator->load(":langs/TestQT_zh_CN"))
+    {
+        qApp->installTranslator(chsTranslator.get());
+    }
+
     ui->setupUi(this);
-    ui->graphicsView->setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
-    ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    themeGroup = new QActionGroup(this);
+    themeGroup->addAction(ui->actionDark);
+    themeGroup->addAction(ui->actionDark_Orange);
+    themeGroup->addAction(ui->actionAdaptic);
+    themeGroup->addAction(ui->actionIntegrid);
+    themeGroup->addAction(ui->actionDefault);
+    themeGroup->setExclusive(true);
+
+    toolboxGroup = new QActionGroup(this);
+    toolboxGroup->addAction(ui->actionOutput_Window);
+    toolboxGroup->addAction(ui->actionTemplate_Window);
+    toolboxGroup->setExclusionPolicy(QActionGroup::ExclusionPolicy::ExclusiveOptional);
+    ui->actionOutput_Window->setChecked(true);
+    ui->actionTemplate_Window->setChecked(false);
+    ui->dockWidget->setVisible(true);
+    ui->dockWidget_2->setVisible(false);
+
+    menuLang = new QMenu(ui->menubar);
+    menuLang->setObjectName(QString::fromUtf8("menuLanguage"));
+
+    actionLangEng = new QAction(this);
+    actionLangEng->setObjectName(QString::fromUtf8("actionLangEng"));
+    actionLangEng->setCheckable(true);
+
+    actionLangChs = new QAction(this);
+    actionLangChs->setObjectName(QString::fromUtf8("actionLangChs"));
+    actionLangChs->setCheckable(true);
+
+    ui->menubar->addAction(menuLang->menuAction());
+    menuLang->addAction(actionLangEng);
+    menuLang->addAction(actionLangChs);
+
+    langGroup = new QActionGroup(this);
+    langGroup->addAction(actionLangEng);
+    langGroup->addAction(actionLangChs);
+    langGroup->setExclusive(true);
+    actionLangChs->setChecked(true);
+    retranslateUi();
+    ui->menubar->adjustSize();
+
+    connect(actionLangEng, &QAction::toggled, this, &MainWindow::selectEnglish);
+    connect(actionLangChs, &QAction::toggled, this, &MainWindow::selectChinese);
+
+    ui->graphicsView->setViewport(new QOpenGLWidget());
+    ui->graphicsView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
 
     scene = new QGraphicsScene();
     scene->setBackgroundBrush(QBrush(Qt::gray));
@@ -113,5 +164,38 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    delete themeGroup;
+    delete langGroup;
     delete ui;
+}
+
+void MainWindow::retranslateUi()
+{
+    actionLangEng->setShortcut(tr("Alt+E"));
+    actionLangEng->setStatusTip(tr("Set UI language to English"));
+    actionLangChs->setShortcut(tr("Alt+C"));
+    actionLangChs->setStatusTip(tr("Set UI language to Chinese"));
+    menuLang->setTitle(tr("Language"));
+    actionLangEng->setText(tr("English"));
+    actionLangChs->setText(tr("Chinese"));
+}
+
+void MainWindow::selectEnglish(bool)
+{
+    if (actionLangEng->isChecked())
+    {
+        qApp->removeTranslator(chsTranslator.get());
+        ui->retranslateUi(this);
+        retranslateUi();
+    }
+}
+
+void MainWindow::selectChinese(bool)
+{
+    if (actionLangChs->isChecked())
+    {
+        qApp->installTranslator(chsTranslator.get());
+        ui->retranslateUi(this);
+        retranslateUi();
+    }
 }

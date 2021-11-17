@@ -32,11 +32,11 @@ source_group(source REGULAR_EXPRESSION ".*[.]cpp")
 source_group(headers REGULAR_EXPRESSION ".*[.]h")
 source_group(continuous-integration REGULAR_EXPRESSION ".*[.]yml")
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Gui Widgets OpenGL LinguistTools REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets OpenGL LinguistTools REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Gui Widgets OpenGL OpenGLWidgets LinguistTools REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets OpenGL OpenGLWidgets LinguistTools REQUIRED)
 
 list(APPEND QT_RESOURCES resources/resources.qrc)
-qt5_add_resources(RESOURCES ${QT_RESOURCES})
+qt_add_resources(RESOURCES ${QT_RESOURCES})
 list(APPEND RESOURCES resources/resources.rc)
 
 set(TS_FILES TestQT_zh_CN.ts)
@@ -60,6 +60,6 @@ else()
   )
 endif()
 
-target_link_libraries(TestQT PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::OpenGL)
+target_link_libraries(TestQT PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::OpenGL Qt${QT_VERSION_MAJOR}::OpenGLWidgets)
 
-qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
