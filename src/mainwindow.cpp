@@ -28,9 +28,9 @@ MainWindow::MainWindow(QWidget *parent)
     toolboxGroup->addAction(ui->actionOutput_Window);
     toolboxGroup->addAction(ui->actionTemplate_Window);
     toolboxGroup->setExclusionPolicy(QActionGroup::ExclusionPolicy::ExclusiveOptional);
-    ui->actionOutput_Window->setChecked(true);
+    ui->actionOutput_Window->setChecked(false);
     ui->actionTemplate_Window->setChecked(false);
-    ui->dockWidget->setVisible(true);
+    ui->dockWidget->setVisible(false);
     ui->dockWidget_2->setVisible(false);
 
     menuLang = new QMenu(ui->menubar);
@@ -58,21 +58,33 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(actionLangEng, &QAction::toggled, this, &MainWindow::selectEnglish);
     connect(actionLangChs, &QAction::toggled, this, &MainWindow::selectChinese);
+    connect(ui->actionZoom_Fit, &QAction::triggered, this, &MainWindow::fitImageView);
 
     ui->graphicsView->setViewport(new QOpenGLWidget());
     ui->graphicsView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    ui->graphicsView->setMouseTracking(true);
+    ui->graphicsView->viewport()->installEventFilter(this);
 
     scene = new QGraphicsScene();
     scene->setBackgroundBrush(QBrush(Qt::gray));
+    scene->setSceneRect(0, 0, 800, 600);
     ui->graphicsView->setScene(scene);
 
-    QGraphicsRectItem *item1 = new QGraphicsRectItem(0, 0, 100, 100);
+    QGraphicsRectItem *item1 = new QGraphicsRectItem(100, 100, 100, 100);
     item1->setBrush(QBrush(Qt::transparent));
     item1->setPen(QPen(Qt::red));
     item1->setFlag(QGraphicsItem::ItemIsMovable);
     item1->setFlag(QGraphicsItem::ItemIsSelectable);
     item1->setZValue(1);
     scene->addItem(item1);
+
+    QGraphicsEllipseItem* item2 = new QGraphicsEllipseItem(150, 150, 100, 80);
+    item2->setBrush(QBrush(Qt::transparent));
+    item2->setPen(QPen(Qt::red));
+    item2->setFlag(QGraphicsItem::ItemIsMovable);
+    item2->setFlag(QGraphicsItem::ItemIsSelectable);
+    item2->setZValue(1);
+    scene->addItem(item2);
 
     connect(ui->actionImport_Image, &QAction::triggered, [&]()
     {
@@ -180,6 +192,19 @@ void MainWindow::retranslateUi()
     actionLangChs->setText(tr("Chinese"));
 }
 
+bool MainWindow::eventFilter(QObject* obj, QEvent* evt)
+{
+    if (ui->graphicsView->viewport() == obj && QEvent::MouseButtonPress == evt->type())
+    {
+        QMouseEvent* me = (QMouseEvent*)evt;
+        if (me->button() == Qt::LeftButton)
+        {
+            qDebug() << "position: " << me->position() << " pos" << me->pos() << "globalPosition" << me->globalPosition();
+        }
+    }
+    return QMainWindow::eventFilter(obj, evt);
+}
+
 void MainWindow::selectEnglish(bool)
 {
     if (actionLangEng->isChecked())
@@ -197,5 +222,13 @@ void MainWindow::selectChinese(bool)
         qApp->installTranslator(chsTranslator.get());
         ui->retranslateUi(this);
         retranslateUi();
+    }
+}
+
+void MainWindow::fitImageView(bool)
+{
+    if (imageItem)
+    {
+        ui->graphicsView->fitInView(imageItem, Qt::KeepAspectRatio);
     }
 }

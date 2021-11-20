@@ -20,13 +20,14 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-public:
-    
+public:   
     void retranslateUi();
+    bool eventFilter(QObject* object, QEvent* event) override;
 
 private slots:
     void selectEnglish(bool);
     void selectChinese(bool);
+    void fitImageView(bool);
 
 public:
     QMenu* menuLang;
@@ -35,15 +36,6 @@ public:
     QActionGroup* langGroup;
     QActionGroup* themeGroup;
     QActionGroup* toolboxGroup;
-    QAction* actionUndo;
-    QAction* actionRedo;
-    QAction* actionFitImage;
-    QAction* actionFitView;
-    QAction* actionFitImage;
-    QAction* actionZoomImage11;
-    QAction* actionZoomImageIn;
-    QAction* actionZoomImageOut;
-    QToolBar* mainToolBar;
     std::unique_ptr<QTranslator> chsTranslator;
 
 private:

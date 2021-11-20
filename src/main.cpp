@@ -18,6 +18,8 @@ int main(int argc, char *argv[])
         //qApp->setStyleSheet(ts.readAll());
     }
 
+    qDebug() << "Start TestQT";
+
     MainWindow w;
     w.show();
     return a.exec();
