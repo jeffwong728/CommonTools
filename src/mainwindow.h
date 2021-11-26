@@ -8,9 +8,11 @@ namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 class QGraphicsScene;
 class QGraphicsPixmapItem;
+class QGraphicsTextItem;
 class QActionGroup;
 class QTranslator;
 class QToolBar;
+class QPluginLoader;
 
 class MainWindow : public QMainWindow
 {
@@ -27,7 +29,12 @@ public:
 private slots:
     void selectEnglish(bool);
     void selectChinese(bool);
+    void actualImageView(bool);
     void fitImageView(bool);
+    void zoomInImageView(bool);
+    void zoomOutImageView(bool);
+    void zoomSelectionImageView(bool);
+    void on_image_ready(QImage);
 
 public:
     QMenu* menuLang;
@@ -44,5 +51,7 @@ private:
 private:
     QGraphicsScene *scene = nullptr;
     QGraphicsPixmapItem *imageItem = nullptr;
+    QGraphicsTextItem* pyOutput = nullptr;
+    QPluginLoader* loader = nullptr;
 };
 #endif // MAINWINDOW_H

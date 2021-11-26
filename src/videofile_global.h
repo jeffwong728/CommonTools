@@ -1,0 +1,12 @@
+#ifndef VIDEOFILE_GLOBAL_H
+#define VIDEOFILE_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(VIDEOFILE_LIBRARY)
+#define VIDEOFILE_LIBRARY_EXPORT Q_DECL_EXPORT
+#else
+#define VIDEOFILE_LIBRARY_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // VIDEOFILE_GLOBAL_H

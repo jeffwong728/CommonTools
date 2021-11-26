@@ -3,7 +3,11 @@
 #include <QtWidgets>
 #include <QActionGroup>
 #include <QOpenGLWidget>
-#include <QTranslator>
+#include "icamera.h"
+
+extern std::pair<std::string, bool> PyRunFile(const std::string& strFullPath);
+extern void PyClearOutput();
+extern std::string PyGetOutput();
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -58,7 +62,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(actionLangEng, &QAction::toggled, this, &MainWindow::selectEnglish);
     connect(actionLangChs, &QAction::toggled, this, &MainWindow::selectChinese);
+    connect(ui->actionZoom_Actual, &QAction::triggered, this, &MainWindow::actualImageView);
     connect(ui->actionZoom_Fit, &QAction::triggered, this, &MainWindow::fitImageView);
+    connect(ui->actionZoom_In, &QAction::triggered, this, &MainWindow::zoomInImageView);
+    connect(ui->actionZoom_Out, &QAction::triggered, this, &MainWindow::zoomOutImageView);
+    connect(ui->actionZoom_Selection, &QAction::triggered, this, &MainWindow::zoomSelectionImageView);
 
     ui->graphicsView->setViewport(new QOpenGLWidget());
     ui->graphicsView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
@@ -85,6 +93,9 @@ MainWindow::MainWindow(QWidget *parent)
     item2->setFlag(QGraphicsItem::ItemIsSelectable);
     item2->setZValue(1);
     scene->addItem(item2);
+
+    pyOutput = scene->addText(QString());
+    pyOutput->setFlag(QGraphicsItem::ItemIsMovable);
 
     connect(ui->actionImport_Image, &QAction::triggered, [&]()
     {
@@ -122,6 +133,9 @@ MainWindow::MainWindow(QWidget *parent)
                 {
                     imageItem->setPixmap(QPixmap::fromImage(newImage));
                 }
+
+                ui->graphicsView->resetTransform();
+                scene->setSceneRect(imageItem->boundingRect());
             }
         }
     });
@@ -179,6 +193,11 @@ MainWindow::~MainWindow()
     delete themeGroup;
     delete langGroup;
     delete ui;
+
+    if (loader && loader->isLoaded())
+    {
+        loader->unload();
+    }
 }
 
 void MainWindow::retranslateUi()
@@ -225,10 +244,79 @@ void MainWindow::selectChinese(bool)
     }
 }
 
+void MainWindow::actualImageView(bool)
+{
+    if (imageItem)
+    {
+        qDebug() <<"pos: "<< imageItem->pos() << "bounding rect: " << imageItem->boundingRect();
+        ui->graphicsView->resetTransform();
+        scene->setSceneRect(imageItem->boundingRect());
+    }
+}
+
 void MainWindow::fitImageView(bool)
 {
     if (imageItem)
     {
         ui->graphicsView->fitInView(imageItem, Qt::KeepAspectRatio);
     }
+}
+
+void MainWindow::zoomInImageView(bool)
+{
+    std::string pyFilePath("C:\\Users\\wwang\\Desktop\\qt.py");
+    auto res = PyRunFile(pyFilePath);
+    QString text= QString::fromStdString(res.first);
+    if (res.second)
+    {
+        pyOutput->setPlainText(text);
+    }
+    else
+    {
+        pyOutput->setPlainText(text);
+    }
+}
+
+void MainWindow::zoomOutImageView(bool)
+{
+    if (!loader)
+    {
+        QDir pluginsDir(QCoreApplication::applicationDirPath());
+        loader = new QPluginLoader(pluginsDir.absoluteFilePath(QString("videofile_plugin_d.dll")), this);
+        if (loader)
+        {
+            loader->load();
+            if (loader->isLoaded())
+            {
+                QObject* plugin = loader->instance();
+                if (plugin) {
+                    ICamera* pICam = qobject_cast<ICamera*>(plugin);
+                    if (pICam)
+                    {
+                        connect(pICam, &ICamera::image_ready, this, &MainWindow::on_image_ready);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void MainWindow::zoomSelectionImageView(bool)
+{
+    if (loader && loader->isLoaded())
+    {
+        QObject* plugin = loader->instance();
+        if (plugin) {
+            ICamera* pICam = qobject_cast<ICamera*>(plugin);
+            if (pICam)
+            {
+                pICam->snap();
+            }
+        }
+    }
+}
+
+void MainWindow::on_image_ready(QImage)
+{
+    qDebug() << "Image ready from camera";
 }
