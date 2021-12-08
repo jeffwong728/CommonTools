@@ -290,10 +290,12 @@ void MainWindow::zoomOutImageView(bool)
             {
                 QObject* plugin = loader->instance();
                 if (plugin) {
-                    ICamera* pICam = qobject_cast<ICamera*>(plugin);
-                    if (pICam)
+                    ICameraManager* pICamMgr = qobject_cast<ICameraManager*>(plugin);
+                    if (pICamMgr)
                     {
-                        connect(pICam, &ICamera::image_ready, this, &MainWindow::on_image_ready);
+                        pICamMgr->GetCamera(0)->Open(QString("D:\\tree.avi"));
+                        connect(pICamMgr->GetCamera(0), &ICamera::image_ready, this, &MainWindow::on_image_ready);
+                        pICamMgr->GetCamera(0)->Trigger(30);
                     }
                 }
             }
@@ -307,16 +309,17 @@ void MainWindow::zoomSelectionImageView(bool)
     {
         QObject* plugin = loader->instance();
         if (plugin) {
-            ICamera* pICam = qobject_cast<ICamera*>(plugin);
-            if (pICam)
+            ICameraManager* pICamMgr = qobject_cast<ICameraManager*>(plugin);
+            if (pICamMgr)
             {
-                pICam->snap();
+                pICamMgr->GetCamera(0)->Stop();
             }
         }
     }
 }
 
-void MainWindow::on_image_ready(QImage)
+void MainWindow::on_image_ready(QImage img)
 {
-    qDebug() << "Image ready from camera";
+    imageItem->setPixmap(QPixmap::fromImage(img));
+    ui->graphicsView->fitInView(imageItem, Qt::KeepAspectRatio);
 }

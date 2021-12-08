@@ -3,17 +3,42 @@
 
 #include "videofile_global.h"
 #include "icamera.h"
-#include <QObject>
-#include <QImage.h>
+#include "opencv2/opencv.hpp"
+#include <QDebug>
+#include <QTimer>
+#include <QThread>
 
-class VIDEOFILE_LIBRARY_EXPORT VideoFile : public ICamera {
-  Q_OBJECT
-  Q_PLUGIN_METADATA(IID "testqt_camera_interface")
-  Q_INTERFACES(ICamera)
+class VideoFile : public ICamera {
+    Q_OBJECT
+public:
+    VideoFile();
+    ~VideoFile();
 
 public:
-  // Override abstract function to emit the `name` signal
-  void snap() override { emit image_ready(QImage()); }
+    bool Open(const QString& src) override;
+    bool Close() override;
+    QImage Snap() override;
+    void OneShot() override;
+    void Trigger(int msec) override;
+    void Stop() override;
+
+private slots:
+    QImage SnapAsync();
+    void OneShotAsync();
+    void TriggerAsync(int msec);
+    void StopAsync();
+
+private:
+    void thread_started();
+    void thread_finished();
+    void snap_image();
+
+private:
+    cv::String filename;
+    cv::VideoCapture vc;
+    cv::Mat frame;
+    QThread thread;
+    QTimer timer;
 };
 
 #endif // VIDEOFILE_H
