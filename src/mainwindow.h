@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLocalSocket>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -35,6 +36,7 @@ private slots:
     void zoomOutImageView(bool);
     void zoomSelectionImageView(bool);
     void on_image_ready(QImage);
+    void loaded();
 
 public:
     QMenu* menuLang;

@@ -3,6 +3,8 @@
 #include <QtWidgets>
 #include <QActionGroup>
 #include <QOpenGLWidget>
+#include <QLocalSocket>
+#include <QTextStream>
 #include "icamera.h"
 
 extern std::pair<std::string, bool> PyRunFile(const std::string& strFullPath);
@@ -186,6 +188,8 @@ MainWindow::MainWindow(QWidget *parent)
                     qApp->setStyleSheet(ts.readAll());
                 }
             });
+
+    QMetaObject::invokeMethod(this, "loaded", Qt::QueuedConnection);
 }
 
 MainWindow::~MainWindow()
@@ -322,4 +326,22 @@ void MainWindow::on_image_ready(QImage img)
 {
     imageItem->setPixmap(QPixmap::fromImage(img));
     ui->graphicsView->fitInView(imageItem, Qt::KeepAspectRatio);
+}
+
+void MainWindow::loaded()
+{
+    qDebug() << "TestQT loaded.";
+    QLocalSocket mSocket;
+    mSocket.connectToServer("36663904-E0E6-4DAB-A8EC-83C98B4C48AC");
+    if (mSocket.waitForConnected())
+    {
+        QTextStream ts(&mSocket);
+        ts << "TestQT MainWindow::loaded";
+        ts.flush();
+        if (mSocket.waitForBytesWritten())
+        {
+            mSocket.disconnectFromServer();
+            mSocket.waitForDisconnected();
+        }
+    }
 }

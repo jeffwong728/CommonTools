@@ -39,8 +39,8 @@ set(PYBIND11_NOPYTHON ON)
 find_package(Python3 REQUIRED COMPONENTS Development Interpreter)
 find_package(pybind11 CONFIG REQUIRED)
 find_package(OpenCV CONFIG REQUIRED)
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Gui Widgets OpenGL OpenGLWidgets LinguistTools REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets OpenGL OpenGLWidgets LinguistTools REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Gui Widgets OpenGL OpenGLWidgets LinguistTools Network REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets OpenGL OpenGLWidgets LinguistTools Network REQUIRED)
 
 #set(PYBIND11_NOPYTHON ON)
 #include_directories(${CMAKE_CURRENT_LIST_DIR})
@@ -70,24 +70,21 @@ list(APPEND RESOURCES resources/resources.rc)
 
 set(TS_FILES TestQT_zh_CN.ts)
 
-if(ANDROID)
-  add_library(TestQT SHARED
-    src/main.cpp
-    src/mainwindow.cpp
-    src/mainwindow.h
-    src/mainwindow.ui
-    ${TS_FILES}
-  )
-else()
-  add_executable(TestQT ${GUI_TYPE}
+
+add_executable(TestQT ${GUI_TYPE}
     src/main.cpp
     src/mainwindow.cpp
     src/mainwindow.h
     src/mainwindow.ui
     ${TS_FILES}
     ${RESOURCES}
-  )
-endif()
+)
+
+add_executable(Stub ${GUI_TYPE}
+    src/stub.cpp
+    src/dialog.h
+    src/dialog.cpp
+)
 
 add_library(camera_plugin SHARED src/icamera_global.h src/icamera.h)
 target_link_libraries(camera_plugin PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui opencv_core)
@@ -103,7 +100,10 @@ target_include_directories(TestQT PRIVATE ${Python3_INCLUDE_DIRS})
 target_link_options(TestQT PRIVATE ${Python3_LINK_OPTIONS})
 target_link_libraries(TestQT PRIVATE pybind11::embed)
 target_link_libraries(TestQT PRIVATE camera_plugin opencv_core)
-target_link_libraries(TestQT PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::OpenGL Qt${QT_VERSION_MAJOR}::OpenGLWidgets)
+target_link_libraries(TestQT PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::OpenGL Qt${QT_VERSION_MAJOR}::OpenGLWidgets)
 target_compile_definitions(TestQT PRIVATE -DQT_DEPRECATED_WARNINGS)
+
+target_link_libraries(Stub PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::OpenGL Qt${QT_VERSION_MAJOR}::OpenGLWidgets)
+target_compile_definitions(Stub PRIVATE -DQT_DEPRECATED_WARNINGS)
 
 qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})

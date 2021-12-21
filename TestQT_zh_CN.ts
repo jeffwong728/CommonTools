@@ -296,42 +296,42 @@
         <translation>模板窗</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="205"/>
+        <location filename="src/mainwindow.cpp" line="209"/>
         <source>Alt+E</source>
         <translation>Alt+E</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="206"/>
+        <location filename="src/mainwindow.cpp" line="210"/>
         <source>Set UI language to English</source>
         <translation>设置界面语言为英文</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="207"/>
+        <location filename="src/mainwindow.cpp" line="211"/>
         <source>Alt+C</source>
         <translation>Alt+C</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="208"/>
+        <location filename="src/mainwindow.cpp" line="212"/>
         <source>Set UI language to Chinese</source>
         <translation>设置界面语言为中文</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="209"/>
+        <location filename="src/mainwindow.cpp" line="213"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="210"/>
+        <location filename="src/mainwindow.cpp" line="214"/>
         <source>English</source>
         <translation>英文</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="211"/>
+        <location filename="src/mainwindow.cpp" line="215"/>
         <source>Chinese</source>
         <translation>中文</translation>
     </message>
     <message>
-        <location filename="src/mainwindow.cpp" line="102"/>
+        <location filename="src/mainwindow.cpp" line="104"/>
         <source>Open File</source>
         <translation>打开文件</translation>
     </message>
